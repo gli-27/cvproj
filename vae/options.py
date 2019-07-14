@@ -19,13 +19,18 @@ class Options():
         self.parser.add_argument('--lr', type=float, default=0.0002, help='initial learning rate for adam')
         self.parser.add_argument('--nThreads', default=2, type=int, help='# threads for loading data')
         self.parser.add_argument('--isTrain', type=bool, default=True)
-        self.parser.add_argument('--batch_size', type=int, default=2, help='batch size of training')
+        self.parser.add_argument('--batch_size', type=int, default=1, help='batch size of training')
         self.parser.add_argument('--serial_batches', action='store_true', default=False,
                                  help='if true, takes images in order to make batches, otherwise takes them randomly')
         self.parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
         self.parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
         self.parser.add_argument('--continue_train', action='store_true', default=False,
                                  help='continue training: load the latest model')
+
+        self.parser.add_argument('--input_nc', type=int, default=1, help='# of input channel')
+        self.parser.add_argument('--output_nc', type=int, default=1, help='# of output channel')
+        self.parser.add_argument('--ngf', type=int, default=16, help='# of encoder/decoder \'s filters')
+        self.parser.add_argument('--n_downsampling', type=int, default=4, help='# of times of downsampling')
 
         self.isTrain = True
 
@@ -64,4 +69,5 @@ class Options():
                     opt_file.write('%s: %s\n' % (str(k), str(v)))
                 opt_file.write('-------------- End ----------------\n')
         return self.opt
+
 
