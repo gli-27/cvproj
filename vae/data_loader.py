@@ -1,27 +1,7 @@
 import torch
-from torchvision import transforms
 import torchvision.datasets as datasets
+from torchvision import transforms
 from torch.utils.data import Dataset
-
-class DataLoader(Dataset):
-    def __init__(self, opt):
-        self.opt = opt
-        self.dataset = createDataset(opt)
-        self.dataloader = torch.utils.data.DataLoader(
-            self.dataset,
-            batch_size=opt.batch_size,
-            shuffle=not opt.serial_batches,
-            num_workers=int(opt.nThreads)
-        )
-
-    def load_data(self):
-        return self.dataloader
-
-    def __len__(self):
-        return len(self.dataset)
-
-    def name(self):
-        return 'MNIST'
 
 def createDataLoader(opt):
     data_loader = DataLoader(opt)
@@ -31,11 +11,30 @@ def createDataLoader(opt):
 def createDataset(opt):
     if opt.isTrain:
         dataset = datasets.MNIST(root="./data/",
-                                transform=transforms,
+                                transform=transforms.ToTensor(),
                                 train=True,
                                 download=True)
     else:
         dataset = datasets.MNIST(root="./data/",
-                                   transform=transforms,
+                                   transform=transforms.ToTensor(),
                                    train=False)
     return dataset
+
+def get_transform(normalize=True):
+    transform_list = []
+    transform_list += [transforms.ToTensor()]
+    if normalize:
+        transform_list += [transforms.Normalize((0.5, 0.5, 0.5),
+                           (0.5, 0.5, 0.5))]
+    return transforms.Compose(transform_list)
+
+class DataLoader(Dataset):
+    def __init__(self, opt):
+        self.opt = opt
+        self.dataset = createDataset(opt)
+
+    def __len__(self):
+        return len(self.dataset)
+
+    def name(self):
+        return 'MNIST'
