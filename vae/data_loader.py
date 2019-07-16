@@ -38,3 +38,8 @@ class DataLoader(Dataset):
 
     def name(self):
         return 'MNIST'
+
+    def data_loader(self, opt):
+        return torch.utils.data.DataLoader(
+            self.dataset, batch_size=opt.batch_size, shuffle=True, num_workers=opt.nThreads
+        )
